@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import { Roboto, Space_Grotesk as SpaceGrotesk } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
+import { languages } from '@/i18n/settings'
+import { dir } from 'i18next'
 
 const roboto = Roboto({
 	subsets: ['cyrillic'],
@@ -20,10 +22,15 @@ export const metadata: Metadata = {
 	description: 'Codemy learning platform',
 	icons: { icon: '/logo.svg' },
 }
-
-function RootLayout({ children }: ChildProps) {
+export async function generateStaticParams() {
+	return languages.map(lng => ({ lng }))
+}
+interface Props extends ChildProps {
+	params: { lng: string }
+}
+function RootLayout({ children, params: { lng } }: Props) {
 	return (
-		<html lang='en' suppressHydrationWarning>
+		<html lang={lng} dir={dir(lng)} suppressHydrationWarning>
 			<body
 				className={`${roboto.variable} ${spaceGrotesk.variable}overflow-x-hidden`}
 			>
